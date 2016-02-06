@@ -124,6 +124,14 @@ MainLoop:
 			Call AutoCrossMode
 			AutoCross_Mode_Switch_UP = OFF
 		}
+		
+	else if ((Reverse_Switch = OFF)&(Forward_Switch = OFF))     ;if the car is in neutral, reduce speed and cut throttle
+	
+		{ 
+			Decel_Rate_SpdMx = 9000
+			Max_Speed_SpdMx = 400
+			Throttle_Multiplier= 0
+		}
 ;	else
 ;		{
 ;			;Do Nothing
