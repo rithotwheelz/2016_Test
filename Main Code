@@ -16,12 +16,12 @@
 ;-------------------------------------------------------------------------------------
 ;
 ; 01/30/2016 - Cindy Gomez  - V1.00 Initial Revision. This revision includes:
-;													  - Created subroutines for each of the following modes: Drag Race Mode, Endurance Mode, Autocross Mode.
-;													  - Each of the modes changes the Max Current and turns on the Mode Switch Lights when that mode is active.              
+;	- Created subroutines for each of the following modes: Drag Race Mode, Endurance Mode, Autocross Mode.
+;	- Each of the modes changes the Max Current and turns on the Mode Switch Lights when that mode is active.              
 ;
 ; 02/01/2016 - Patrick Cody - V1.01. This revision includes:
-;											    	- Added declarations
-;														- Added Interlock Check to activate throttle
+;	- Added declarations
+;	- Added Interlock Check to activate throttle
 ;															
 ;
 ;
@@ -31,36 +31,36 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 ;---------------------------------------------------------------
 ; Declaration Section
 ;--------------------
-	Interlock_Switch					equals 	SW_3
+	Interlock_Switch		equals 	SW_3
 
-	Drag_Mode_Switch					equals	SW_6
-	Drag_Mode_Switch_UP				equals	SW_6_UP				;Used if up edge is used for input signal
-	Drag_Mode_Switch_DOWN			equals	SW_6_DOWN			;Used if down edge is used for input signal
+	Drag_Mode_Switch		equals	SW_6
+	Drag_Mode_Switch_UP		equals	SW_6_UP				;Used if up edge is used for input signal
+	Drag_Mode_Switch_DOWN		equals	SW_6_DOWN			;Used if down edge is used for input signal
 	
-	Endurance_Mode_Switch				equals	SW_5
-	Endurance_Mode_Switch_UP		equals	Sw_5_UP			;Used if up edge is used for input signal
+	Endurance_Mode_Switch		equals	SW_5
+	Endurance_Mode_Switch_UP	equals	Sw_5_UP			;Used if up edge is used for input signal
 	Endurance_Mode_Switch_DOWN	equals	Sw_5_DOWN		;Used if down edge is used for input signal
 	
-	AutoCross_Mode_Switch				equals	SW_4
-	AutoCross_Mode_Switch_UP		equals	Sw_4_UP			;Used if up edge is used for input signal
+	AutoCross_Mode_Switch		equals	SW_4
+	AutoCross_Mode_Switch_UP	equals	Sw_4_UP			;Used if up edge is used for input signal
 	AutoCross_Mode_Switch_DOWN	equals	Sw_4_DOWN		;Used if down edge is used for input signal
 	
-	Drag_Lights									equals	PWM6			;Analog Out 0-10V
-	Endurance_Lights						equals	DigOut6		;Driver 6 OFF/ON
-	AutoCross_Lights						equals	DigOut7		;Driver 7 OFF/ON
+	Drag_Lights			equals	PWM6			;Analog Out 0-10V
+	Endurance_Lights		equals	DigOut6		;Driver 6 OFF/ON
+	AutoCross_Lights		equals	DigOut7		;Driver 7 OFF/ON
 	
-	Drag_MaxCurrent_DLY								equals	DLY1
-	Drag_MaxCurrent_DLY_Output				equals	DLY1_Output
+	Drag_MaxCurrent_DLY		equals	DLY1
+	Drag_MaxCurrent_DLY_Output	equals	DLY1_Output
 	
-	Program_Flags								equals	User_Bit1
+	Program_Flags			equals	User_Bit1
 	Drag_Mode_Initialized_Flag 		 bit	Program_Flags.1
-;	Not Used											 bit	Program_Flags.2
-;	Not Used											 bit	Program_Flags.4
-;	Not Used											 bit	Program_Flags.8
-;	Not Used											 bit	Program_Flags.16
-;	Not Used											 bit	Program_Flags.32
-;	Not Used											 bit	Program_Flags.64
-;	Not Used											 bit	Program_Flags.128
+;	Not Used				 bit	Program_Flags.2
+;	Not Used				 bit	Program_Flags.4
+;	Not Used				 bit	Program_Flags.8
+;	Not Used				 bit	Program_Flags.16
+;	Not Used				 bit	Program_Flags.32
+;	Not Used				 bit	Program_Flags.64
+;	Not Used				 bit	Program_Flags.128
 	
 	
 	
@@ -121,17 +121,17 @@ DragMode:
 
 	Drive_Current_Limit = 26213 		;MAX Amps = 400A which is 80% of 32767
 	Put_PWM(Drag_Lights,32767)     		;drag light = ON	
-	Clear_Digout(AutoCross_Lights)	;Turn off autocross light
-	Clear_Digout(Endurance_Lights)	;Turn off endurance light		
-	Drag_Mode_Initialized_Flag = ON ;Turn on Drag Mode Flag
+	Clear_Digout(AutoCross_Lights)		;Turn off autocross light
+	Clear_Digout(Endurance_Lights)		;Turn off endurance light		
+	Drag_Mode_Initialized_Flag = ON 	;Turn on Drag Mode Flag
 	
 	return
 		
 EnduranceMode:
 	
-	Drive_Current_Limit = 6553			;MAX AMPS = 100A which is 20% of 32767
+	Drive_Current_Limit = 6553		;MAX AMPS = 100A which is 20% of 32767
 	Set_Digout(Endurance_Lights)		;endurance light = ON
-	Clear_Digout(AutoCross_Lights)	;Turn off autocross light
+	Clear_Digout(AutoCross_Lights)		;Turn off autocross light
 	Put_PWM(Drag_Lights,0) 			;Turn off drag light
 
 	return
@@ -141,7 +141,7 @@ AutoCrossMode:
 	
 	Drive_Current_Limit = 16383 		;MAX AMPS = 250A which is 50% of 32767
 	Set_Digout(AutoCross_Lights) 		;Turn on autocross light	
-	Put_PWM(Drag_Lights,0)				;Turn off drag light
-	Clear_DigOut(Endurance_Lights)	;Turn off endurance light
+	Put_PWM(Drag_Lights,0)			;Turn off drag light
+	Clear_DigOut(Endurance_Lights)		;Turn off endurance light
 
 	return
