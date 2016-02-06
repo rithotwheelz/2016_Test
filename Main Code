@@ -32,7 +32,10 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 ; Declaration Section
 ;--------------------
 	Interlock_Switch		equals 	SW_3
-
+	
+	Forward_Switch			equals  SW_7
+	Reverse_Switch			equals  SW_8
+	
 	Drag_Mode_Switch		equals	SW_6
 	Drag_Mode_Switch_UP		equals	SW_6_UP				;Used if up edge is used for input signal
 	Drag_Mode_Switch_DOWN		equals	SW_6_DOWN			;Used if down edge is used for input signal
@@ -85,7 +88,18 @@ MainLoop:
 	else
 		{
 			Throttle_Multiplier = 0
-		}	
+		}
+		
+	if((Reverse_Switch = ON)&(Motor_RPM > 0))|((Forward_Switch = ON)&(Motor_RPM < 0))
+	{
+		setup_delay(Change_Direction_Delay,3000)
+	}
+		
+	if (Reverse_Switch = ON)
+	{
+			Max_Speed_SpdMx = 500
+			Accel_Rate_SpdMx = 15000
+	}	
 	
 	if (Drag_Mode_Switch_UP = ON)
 		{
