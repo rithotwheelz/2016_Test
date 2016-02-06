@@ -138,6 +138,12 @@ MainLoop:
 ;		}
 			
 	goto MainLoop
+	
+	
+;-------------------------------------------------------------------------
+; Subroutines
+;---------------------------------------------
+;
 
 DragMode:			
 
@@ -167,3 +173,13 @@ AutoCrossMode:
 	Clear_DigOut(Endurance_Lights)		;Turn off endurance light
 
 	return
+	
+	
+	
+;-------------------------------------------------------------------------
+; Startup CAN system
+;---------------------------------------------
+;
+; This routine initializes and starts the CAN System. It has to be
+; called in the One Time setup (before the main loop).
+
