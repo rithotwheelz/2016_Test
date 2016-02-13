@@ -183,3 +183,102 @@ AutoCrossMode:
 ; This routine initializes and starts the CAN System. It has to be
 ; called in the One Time setup (before the main loop).
 
+;-------------------------------------------------------------------------------
+; MAILBOX 1
+;   Purpose:        Send NMT message from controller(master) to BMS(slave)
+;   Type:           NMT
+;   Transmition:    Only sent once to put slave into operational mode after configuration 
+;   Data Length:    2 Bytes
+;-------------------------------------------------------------------------------
+
+Setup_Mailbox(CAN1,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox_Data(CAN1,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
+
+
+;-------------------------------------------------------------------------------
+; MAILBOX 2
+;   Purpose:        Send NMT message from controller(master) to Display(slave)
+;   Type:           NMT
+;   Transmition:    Only sent once to put slave into operational mode after configuration 
+;   Data Length:    2 Bytes
+;-------------------------------------------------------------------------------
+
+Setup_Mailbox(CAN2,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox_Data(CAN2,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
+
+
+;-------------------------------------------------------------------------------
+; MAILBOX 3
+;   Purpose:        BMS(slave) receives NMT message from controller(master) 
+;   Type:           NMT
+;   Reception:      Used to put the BMS into operational mode after configuration 
+;   Data Length:    2 Bytes
+;-------------------------------------------------------------------------------
+
+Setup_Mailbox(CAN3,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox_Data(CAN3,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
+
+;-------------------------------------------------------------------------------
+; MAILBOX 4
+;   Purpose:        Display(slave) receives NMT message from controller(master) 
+;   Type:           NMT
+;   Reception:      Used to put the Display into operational mode after configuration 
+;   Data Length:    2 Bytes
+;-------------------------------------------------------------------------------
+
+Setup_Mailbox(CAN4,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
+
+
+
+;-------------------------------------------------------------------------------
+; MAILBOX 9
+;   Purpose:        BMS (slave) sends Heartbeat message to the controller(master)
+;   Type:           Heartbeat
+;   Transmition:    Used to send Heartbeat messages from BMS to the controller
+;
+;   Data Length:    1 Byte
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN9,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN9,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+
+;-------------------------------------------------------------------------------
+; MAILBOX 10
+;   Purpose:        Display (slave) sends Heartbeat message to the controller(master)
+;   Type:           Heartbeat
+;   Transmition:    Used to send Heartbeat messages from Display to the controller
+;
+;   Data Length:    1 Byte
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN10,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN10,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+  
+;-------------------------------------------------------------------------------
+; MAILBOX 11
+;   Purpose:        the controller(master) recives a heartbeat message from the BMS (slave)
+;   Type:           Heartbeat
+;   Reception:      Used to send Heartbeat messages from BMS to the controller
+;
+;   Data Length:    1 Byte
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN11,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN11,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+
+;-------------------------------------------------------------------------------
+; MAILBOX 12
+;   Purpose:        the controller(master) recives a heartbeat message from the Display (slave)
+;   Type:           Heartbeat
+;   Reception:      Used to send Heartbeat messages from Display to the controller
+;
+;   Data Length:    1 Byte
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN12,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN12,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+
+
+
+
+
+
+
+
