@@ -191,7 +191,7 @@ AutoCrossMode:
 ;   Data Length:    2 Bytes
 ;-------------------------------------------------------------------------------
 
-Setup_Mailbox(CAN1,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox(CAN1,0,0, ,C_EVENT,C_XMT,0,0)
 Setup_Mailbox_Data(CAN1,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
 
 
@@ -203,7 +203,7 @@ Setup_Mailbox_Data(CAN1,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;   Data Length:    2 Bytes
 ;-------------------------------------------------------------------------------
 
-Setup_Mailbox(CAN2,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox(CAN2,0,0, ,C_EVENT,C_XMT,0,0)
 Setup_Mailbox_Data(CAN2,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
 
 
@@ -215,7 +215,7 @@ Setup_Mailbox_Data(CAN2,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;   Data Length:    2 Bytes
 ;-------------------------------------------------------------------------------
 
-Setup_Mailbox(CAN3,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox(CAN3,0,0, ,C_EVENT,C_RCV,0,0)
 Setup_Mailbox_Data(CAN3,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
 
 ;-------------------------------------------------------------------------------
@@ -226,7 +226,7 @@ Setup_Mailbox_Data(CAN3,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;   Data Length:    2 Bytes
 ;-------------------------------------------------------------------------------
 
-Setup_Mailbox(CAN4,0,0,0x000,C_EVENT,C_XMT,0,0)
+Setup_Mailbox(CAN4,0,0, ,C_EVENT,C_RCV,0,0)
 Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
 
 
@@ -239,7 +239,7 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;
 ;   Data Length:    1 Byte
 ;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN9,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox(CAN9,0,0,Controller_ID ,C_EVENT,C_XMT,0,0)
   Setup_Mailbox_Data(CAN9,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
 
 ;-------------------------------------------------------------------------------
@@ -250,7 +250,7 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;
 ;   Data Length:    1 Byte
 ;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN10,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox(CAN10,0,0, Controller_ID ,C_EVENT,C_XMT,0,0)
   Setup_Mailbox_Data(CAN10,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
   
 ;-------------------------------------------------------------------------------
@@ -261,7 +261,7 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;
 ;   Data Length:    1 Byte
 ;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN11,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox(CAN11,0,0,HEARTBEAT_BASE + BMS_ID,C_EVENT,C_RCV,0,0)
   Setup_Mailbox_Data(CAN11,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
 
 ;-------------------------------------------------------------------------------
@@ -272,7 +272,7 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;
 ;   Data Length:    1 Byte
 ;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN12,0,0,HEARTBEAT_BASE + Par_E7_Node_ID,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox(CAN12,0,0,HEARTBEAT_BASE + Engage_ID,C_EVENT,C_RCV,0,0)
   Setup_Mailbox_Data(CAN12,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
 
 
