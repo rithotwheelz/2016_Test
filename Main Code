@@ -9,7 +9,7 @@
 ;   77 Lomb Memorial Dr
 ;		Rochester, NY 14623                             	          
 ;   
-;
+; Engage=THE DISPLAY
 ;
 ;-------------------------------------------------------------------------------------
 ;   Revision History (reflected in the VCL App Version variable that is displayed on the 1313)
@@ -23,7 +23,7 @@
 ;	- Added declarations
 ;	- Added Interlock Check to activate throttle
 ;															
-;
+;See GitHub Revisions for remainder of revisions
 ;
 ;										
 VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
@@ -228,6 +228,57 @@ Setup_Mailbox_Data(CAN3,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 
 Setup_Mailbox(CAN4,0,0, ,C_EVENT,C_RCV,0,0)
 Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
+
+
+
+;-------------------------------------------------------------------------------
+; MAILBOX 5
+;   Purpose:        controller (Master) sends EMCY message (faults) to the BMS(slave)
+;   Type:           Fault
+;   Transmition:    Used to send fault messages from controller to the BMS in case of emergency or failure
+;
+;   Data Length:    8 Bytes
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN5,1,0, ,C_EVENT,C_XMT,0,0)
+  Setup_Mailbox_Data(CAN5,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+  
+;-------------------------------------------------------------------------------
+; MAILBOX 6
+;   Purpose:        controller (Master) sends EMCY message (faults) to the Display(slave)
+;   Type:           Fault
+;   Transmition:    Used to send fault messages from controller to the Display in case of emergency or failure
+;
+;   Data Length:    8 Bytes
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN6,1,0, ,C_EVENT,C_XMT,0,0)
+  Setup_Mailbox_Data(CAN5,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+
+;-------------------------------------------------------------------------------
+; MAILBOX 7
+;   Purpose:        the Display(slave) recives an EMCY message (faults) from the controller (Master) 
+;   Type:           Fault
+;   Transmition:    Used to receive fault messages from  the controller in case of emergency or failure
+;
+;   Data Length:    8 Bytes
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN7,1,0, ,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN7,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+
+
+;-------------------------------------------------------------------------------
+; MAILBOX 8
+;   Purpose:        the BMS(slave) recives an EMCY message (faults) from the controller (Master) 
+;   Type:           Fault
+;   Transmition:    Used to receive fault messages from  the controller in case of emergency or failure
+;
+;   Data Length:    8 Bytes
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN8,1,0, ,C_EVENT,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN8,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+
+
+
+
 
 
 
