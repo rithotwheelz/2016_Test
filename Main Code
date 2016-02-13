@@ -325,11 +325,108 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;-------------------------------------------------------------------------------
   Setup_Mailbox(CAN12,0,0,HEARTBEAT_BASE + Engage_ID,C_EVENT,C_RCV,0,0)
   Setup_Mailbox_Data(CAN12,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
+  
+ 
+ 
+;-------------------------------------------------------------------------------
+; MAILBOX 13
+;   Purpose:        Controller (master) sends  message to BMS (slave) for ADD DATA HERE
+;			
+;   Type:           PDO_MISO
+;   Transmission:   Should be sent cyclically by the controller to the
+;						BMS at about a ADD SPEED HERE(40 ms) rate
+;   Data Length:    8 Bytes? (CHNGE WHEN DATA HAS BEEN DETERMINED)
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN13,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_XMT,0,0)
+  Setup_Mailbox_Data(CAN13,DLC_PDO,	
+						@BDI_Percentage,			 
+						@BDI_Percentage+USEHB,	 
+						@E7_Icons_Low_Word,		  
+						@E7_Icons_Low_Word+USEHB,	 
+						@E7_Icons_High_Word,	   
+						@E7_Icons_High_Word+USEHB,
+						@E7_MOSFET_Command,	  		
+  						@E7_Alarm_Command)	    
+
+;-------------------------------------------------------------------------------
+; MAILBOX 14
+;   Purpose:        Controller (master) sends message to display (slave) for ADD DATA HERE
+;			
+;   Type:           PDO_MISO
+;   Transmission:   Should be sent cyclically by the controller to the
+;						doisplay at about a ADD SPEED HERE(40 ms) rate
+;   Data Length:    8 Bytes? (CHNGE WHEN DATA HAS BEEN DETERMINED)
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN14,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_XMT,0,0)
+  Setup_Mailbox_Data(CAN14,DLC_PDO,	
+						@BDI_Percentage,			 
+						@BDI_Percentage+USEHB,	 
+						@E7_Icons_Low_Word,		  
+						@E7_Icons_Low_Word+USEHB,	 
+						@E7_Icons_High_Word,	   
+						@E7_Icons_High_Word+USEHB,
+						@E7_MOSFET_Command,	  		
+  						@E7_Alarm_Command)
 
 
+;-------------------------------------------------------------------------------
+; MAILBOX 15
+;   Purpose:        Controller (master) receives  messages from BMS (slave) for ADD DATA HERE
+;			
+;   Type:           PDO_MISO
+;   Reception:       received cyclically
+;   Data Length:    8 Bytes? (CHNGE WHEN DATA HAS BEEN DETERMINED)
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN15,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN15,DLC_PDO,	
+						@BDI_Percentage,			 
+						@BDI_Percentage+USEHB,	 
+						@E7_Icons_Low_Word,		  
+						@E7_Icons_Low_Word+USEHB,	 
+						@E7_Icons_High_Word,	   
+						@E7_Icons_High_Word+USEHB,
+						@E7_MOSFET_Command,	  		
+  						@E7_Alarm_Command)
 
-
-
+;-------------------------------------------------------------------------------
+; MAILBOX 16
+;   Purpose:        Controller (master) receives  messages from Display (slave) for ADD DATA HERE
+;			
+;   Type:            PDO_MISO
+;   Reception:       received cyclically
+;   Data Length:    8 Bytes? (CHNGE WHEN DATA HAS BEEN DETERMINED)
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN16,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_RCV,0,0)
+  Setup_Mailbox_Data(CAN16,DLC_PDO,	
+						@BDI_Percentage,			 
+						@BDI_Percentage+USEHB,	 
+						@E7_Icons_Low_Word,		  
+						@E7_Icons_Low_Word+USEHB,	 
+						@E7_Icons_High_Word,	   
+						@E7_Icons_High_Word+USEHB,
+						@E7_MOSFET_Command,	  		
+  						@E7_Alarm_Command)
+  						
+;-------------------------------------------------------------------------------
+; MAILBOX 17
+;   Purpose:        BMS (slave) sends message to controler (master) for ADD DATA HERE
+;			
+;   Type:           PDO_MOSI
+;   Transmission:   Should be sent cyclically at about a ADD SPEED HERE(40 ms) rate
+;
+;   Data Length:    8 Bytes? (CHNGE WHEN DATA HAS BEEN DETERMINED)
+;-------------------------------------------------------------------------------
+  Setup_Mailbox(CAN17,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_XMT,0,0)
+  Setup_Mailbox_Data(CAN17,DLC_PDO,	
+						@BDI_Percentage,			 
+						@BDI_Percentage+USEHB,	 
+						@E7_Icons_Low_Word,		  
+						@E7_Icons_Low_Word+USEHB,	 
+						@E7_Icons_High_Word,	   
+						@E7_Icons_High_Word+USEHB,
+						@E7_MOSFET_Command,	  		
+  						@E7_Alarm_Command)
+  						
 
 
 
