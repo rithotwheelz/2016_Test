@@ -31,6 +31,8 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 ;---------------------------------------------------------------
 ; Declaration Section
 ;--------------------
+	
+
 	Interlock_Switch		equals 	SW_3
 	
 	Forward_Switch			equals  SW_7
@@ -55,6 +57,9 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 	Drag_MaxCurrent_DLY		equals	DLY1
 	Drag_MaxCurrent_DLY_Output	equals	DLY1_Output
 	
+	Buzzer_DLY			equals  DLY2		;CHeck These
+	Buzzer_DLY_Output		equals	DLY2_Output
+	
 	Program_Flags			equals	User_Bit1
 	Drag_Mode_Initialized_Flag 		 bit	Program_Flags.1
 ;	Not Used				 bit	Program_Flags.2
@@ -75,6 +80,9 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 		Program_Flags = 0
 		VCL_Throttle_Enable = ON
 	
+		
+		
+	
 ;-------------------------------------------------------------------------
 ; Main :: Main Loop of the Program
 ;---------------------------------------------
@@ -84,6 +92,16 @@ MainLoop:
 	if (Interlock_Switch = ON)			;The Interlock Switch is the switch on the throttle pedal. If the switch is off, do not allow throttle command
 		{
 			Throttle_Multiplier = 128
+			
+				PD_Enable = OFF
+				if (ABS(Throttle_Pot_Output)>0)			;if throttle is engaged startup buzzer goes off
+				{
+					Put_PWM(PWM5,32767)			;sets output voltage to 100%- 12V
+										; Set up value for Buzzer_DLY!!!
+					Setup_Delay(Buzzer_DLY,3000)		;Delays are in increments of 1ms so 3000 = 3secs
+					Put_PWM(PWM5,0)				;sets output voltage to 0%, 0V
+		
+				}	
 		}
 	else
 		{
@@ -107,7 +125,7 @@ MainLoop:
 			AutoCross_Mode_Switch_UP = OFF
 			Call DragMode
 			Drag_Mode_Switch_UP = OFF
-			Setup_Delay(Drag_MaxCurrent_DLY,7800)		;Delays are in increments of 1ms so 8000 = 8secs
+			Setup_Delay(Drag_MaxCurrent_DLY,8000)		;Delays are in increments of 1ms so 8000 = 8secs
 		}
 	else if (Endurance_Mode_Switch_UP = ON)
 		{
