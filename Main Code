@@ -79,6 +79,9 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 ;
 		Program_Flags = 0
 		VCL_Throttle_Enable = ON
+		
+		Setup_Delay(Buzzer_DLY,3000)		;Amount of time for ready to drive noise
+		PD_Enable = OFF
 	
 		
 		
@@ -89,19 +92,16 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 ;
 MainLoop:
 	
-	if (Interlock_Switch = ON)			;The Interlock Switch is the switch on the throttle pedal. If the switch is off, do not allow throttle command
+	If(Buzzer_DLY_Output<>0)             ;while the buzzer delay output does not equal 0, sound the buzzer
+	{
+                Put_PWM(PWM5, 32767)         ;make PWM5 have a declaration name in the declaration section and then use the name in place of this PWM5
+        }Else{
+		Put_PWM(PWM5,0)              ;make PWM5 have a declaration name in the declaration section and then use the name in place of this PWM5
+	}
+	
+	if (Interlock_Switch = ON)		;The Interlock Switch is the switch on the throttle pedal. If the switch is off, do not allow throttle command
 		{
 			Throttle_Multiplier = 128
-			
-				PD_Enable = OFF
-				if (ABS(Throttle_Pot_Output)>0)			;if throttle is engaged startup buzzer goes off
-				{
-					Put_PWM(PWM5,32767)			;sets output voltage to 100%- 12V
-										; Set up value for Buzzer_DLY!!!
-					Setup_Delay(Buzzer_DLY,3000)		;Delays are in increments of 1ms so 3000 = 3secs
-					Put_PWM(PWM5,0)				;sets output voltage to 0%, 0V
-		
-				}	
 		}
 	else
 		{
