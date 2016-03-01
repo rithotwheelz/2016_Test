@@ -213,52 +213,6 @@ Setup_Mailbox(CAN1,0,0, ,C_EVENT,C_XMT,0,0)
 Setup_Mailbox_Data(CAN1,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
 
 
-;-------------------------------------------------------------------------------
-; MAILBOX 2
-;   Purpose:        Send NMT message from controller(master) to Display(slave)
-;   Type:           NMT
-;   Transmition:    Only sent once to put slave into operational mode after configuration 
-;   Data Length:    2 Bytes
-;-------------------------------------------------------------------------------
-
-Setup_Mailbox(CAN2,0,0, ,C_EVENT,C_XMT,0,0)
-Setup_Mailbox_Data(CAN2,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
-
-
-;-------------------------------------------------------------------------------
-; MAILBOX 3
-;   Purpose:        BMS(slave) receives NMT message from controller(master) 
-;   Type:           NMT
-;   Reception:      Used to put the BMS into operational mode after configuration 
-;   Data Length:    2 Bytes
-;-------------------------------------------------------------------------------
-
-Setup_Mailbox(CAN3,0,0, ,C_EVENT,C_RCV,0,0)
-Setup_Mailbox_Data(CAN3,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
-
-;-------------------------------------------------------------------------------
-; MAILBOX 4
-;   Purpose:        Display(slave) receives NMT message from controller(master) 
-;   Type:           NMT
-;   Reception:      Used to put the Display into operational mode after configuration 
-;   Data Length:    2 Bytes
-;-------------------------------------------------------------------------------
-
-Setup_Mailbox(CAN4,0,0, ,C_EVENT,C_RCV,0,0)
-Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
-
-
-
-;-------------------------------------------------------------------------------
-; MAILBOX 5
-;   Purpose:        controller (Master) sends EMCY message (faults) to the BMS(slave)
-;   Type:           Fault
-;   Transmition:    Used to send fault messages from controller to the BMS in case of emergency or failure
-;
-;   Data Length:    8 Bytes
-;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN5,1,0, ,C_EVENT,C_XMT,0,0)
-  Setup_Mailbox_Data(CAN5,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
   
 ;-------------------------------------------------------------------------------
 ; MAILBOX 6
@@ -295,32 +249,6 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
   Setup_Mailbox_Data(CAN8,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
 
 
-
-
-
-
-
-;-------------------------------------------------------------------------------
-; MAILBOX 9
-;   Purpose:        BMS (slave) sends Heartbeat message to the controller(master)
-;   Type:           Heartbeat
-;   Transmition:    Used to send Heartbeat messages from BMS to the controller
-;
-;   Data Length:    1 Byte
-;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN9,0,0,Controller_ID ,C_EVENT,C_XMT,0,0)
-  Setup_Mailbox_Data(CAN9,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
-
-;-------------------------------------------------------------------------------
-; MAILBOX 10
-;   Purpose:        Display (slave) sends Heartbeat message to the controller(master)
-;   Type:           Heartbeat
-;   Transmition:    Used to send Heartbeat messages from Display to the controller
-;
-;   Data Length:    1 Byte
-;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN10,0,0, Controller_ID ,C_EVENT,C_XMT,0,0)
-  Setup_Mailbox_Data(CAN10,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
   
 ;-------------------------------------------------------------------------------
 ; MAILBOX 11
@@ -333,16 +261,6 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
   Setup_Mailbox(CAN11,0,0,HEARTBEAT_BASE + BMS_ID,C_EVENT,C_RCV,0,0)
   Setup_Mailbox_Data(CAN11,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
 
-;-------------------------------------------------------------------------------
-; MAILBOX 12
-;   Purpose:        the controller(master) recives a heartbeat message from the Display (slave)
-;   Type:           Heartbeat
-;   Reception:      Used to send Heartbeat messages from Display to the controller
-;
-;   Data Length:    1 Byte
-;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN12,0,0,HEARTBEAT_BASE + Engage_ID,C_EVENT,C_RCV,0,0)
-  Setup_Mailbox_Data(CAN12,DLC_HEARTBEAT,@E7_NMT_State,0,0,0,0,0,0,0)
   
  
  
@@ -406,45 +324,14 @@ Setup_Mailbox_Data(CAN4,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 						@E7_MOSFET_Command,	  		
   						@E7_Alarm_Command)
 
+
+
 ;-------------------------------------------------------------------------------
-; MAILBOX 16
-;   Purpose:        Controller (master) receives  messages from Display (slave) for ADD DATA HERE
+; MAILBOX 22
+;   Purpose:        Master sends data to Display(SDO_MOSI)
 ;			
-;   Type:            PDO_MISO
+;   Type:           SDO_MOSI
 ;   Reception:       received cyclically
 ;   Data Length:    8 Bytes? (CHNGE WHEN DATA HAS BEEN DETERMINED)
 ;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN16,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_RCV,0,0)
-  Setup_Mailbox_Data(CAN16,DLC_PDO,	
-						@BDI_Percentage,			 
-						@BDI_Percentage+USEHB,	 
-						@E7_Icons_Low_Word,		  
-						@E7_Icons_Low_Word+USEHB,	 
-						@E7_Icons_High_Word,	   
-						@E7_Icons_High_Word+USEHB,
-						@E7_MOSFET_Command,	  		
-  						@E7_Alarm_Command)
-  						
-;-------------------------------------------------------------------------------
-; MAILBOX 17
-;   Purpose:        BMS (slave) sends message to controler (master) for ADD DATA HERE
-;			
-;   Type:           PDO_MOSI
-;   Transmission:   Should be sent cyclically at about a ADD SPEED HERE(40 ms) rate
-;
-;   Data Length:    8 Bytes? (CHNGE WHEN DATA HAS BEEN DETERMINED)
-;-------------------------------------------------------------------------------
-  Setup_Mailbox(CAN17,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_XMT,0,0)
-  Setup_Mailbox_Data(CAN17,DLC_PDO,	
-						@BDI_Percentage,			 
-						@BDI_Percentage+USEHB,	 
-						@E7_Icons_Low_Word,		  
-						@E7_Icons_Low_Word+USEHB,	 
-						@E7_Icons_High_Word,	   
-						@E7_Icons_High_Word+USEHB,
-						@E7_MOSFET_Command,	  		
-  						@E7_Alarm_Command)
-  						
-
-
-
+Setup_Mailbox(CAN22,0,0,
