@@ -41,7 +41,7 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 ; Declaration Section
 ;--------------------
 	
-	Motor_Type = 211
+;	Motor_Type = 211    this should be set with the 1314 software
 
 	Interlock_Switch		equals 	SW_3
 	
@@ -84,22 +84,58 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 	
 	
 	
+;===============================================================================
+; CAN System Declarations
+;===============================================================================
+
+;------------------------------------------------------------------------------
+; Message Types
+; -These message types are defined in the CAN-Open  protocol and
+;  appear in the upper-most 4 bits of the 11-BIT message identifier
+;------------------------------------------------------------------------------
+;NMT                constant        0x000       ; Network Management
+SYNC_ERR_BASE       constant        0x080       ; Both Sync (COB-ID=0) & Error (COB-ID=Error)
+TIME_STAMP          constant        0x100
+PDO1_TX_BASE        constant        0x180       ; Process Data Object (Master In  Slave Out)
+PDO1_RX_BASE        constant        0x200       ; Process Data Object (Master Out Slave In)
+PDO2_TX_BASE        constant        0x280       ; Process Data Object (System Broadcast 1)
+PDO2_RX_BASE        constant        0x300       ; Process Data Object (System Broadcast 2)
+PDO3_TX_BASE        constant        0x380       ; Process Data Object (System Broadcast 3)
+PDO3_RX_BASE        constant        0x400       ; Process Data Object (System Broadcast 4)
+PDO4_TX_BASE        constant        0x480       ; Index Data Object   (Master In  Slave Out)
+PDO4_RX_BASE        constant        0x500       ; Index Data Object   (Master Out Slave In)
+SDO_MISO_BASE       constant        0x580       ; Service Data Object (Master In  Slave Out)
+SDO_MOSI_BASE       constant        0x600       ; Service Data Object (Master Out Slave In)
+HEARTBEAT_BASE      constant        0x700       ; Node Guard Message
+
+DLC_NMT             constant        0x2         ; Data Length Code of a CANopen NMT Message
+DLC_EMCY            constant        0x8         ; Data Length Code of a CANopen EMCY Message
+DLC_PDO             constant        0x8         ; Data Length Code of a CANopen PDO Message
+DLC_SDO             constant        0x8         ; Data Length Code of a CANopen SDO Message
+DLC_HEARTBEAT       constant        0x1         ; Data Length Code of a CANopen Heartbeat Message
+    
+;-------------------------------------------------------------------------------
+; synchronous cycle period defintion
+;-------------------------------------------------------------------------------
+SYNC_SEND_PERIOD        constant    5   ; 10 * 4ms = 40ms	
+		
+	
 	
 ;===============================================================
 ; One time Initialization
 ;========================
 ;
-		Main_Enable = ON
-		Interlock_Type = 0
-		Precharge_Enable = ON
+;		Main_Enable = ON		this should be set with the 1314 software
+;		Interlock_Type = 0		this should be set with the 1314 software
+;		Precharge_Enable = ON		this should be set with the 1314 software
 
 		Program_Flags = 0
-		VCL_Throttle_Enable = ON
+;		VCL_Throttle_Enable = ON	this should be set with the 1314 software
 		
 		Setup_Delay(Buzzer_DLY,3000)		;Amount of time for ready to drive noise
-		PD_Enable = OFF
+;		PD_Enable = OFF			this should be set with the 1314 software
 	
-		
+		Call startup_CAN_System				;Start CAN to send info from controller to display		;you want this in the one-time section. 
 		
 	
 ;-------------------------------------------------------------------------
@@ -108,12 +144,14 @@ VCL_App_Ver = 101	;Set VCL software revision (101 is Rev 1.01)
 ;
 MainLoop:
 	
-	Call startup_CAN_System				:Start CAN to send info from controller to display
+	
 
 	If(Buzzer_DLY_Output<>0)             ;while the buzzer delay output does not equal 0, sound the buzzer
-		{
+	  {
             Put_PWM(Buzzer_Noise, 32767)         ;turn on the buzzer
-        }Else{
+	  }
+  Else
+  	{
 			Put_PWM(Buzzer_Noise,0)              ;turn off the buzzer
 		}
 	
@@ -208,41 +246,7 @@ AutoCrossMode:
 	
 
 
-;===============================================================================
-; CAN System Declarations
-;===============================================================================
 
-;------------------------------------------------------------------------------
-; Message Types
-; -These message types are defined in the CAN-Open  protocol and
-;  appear in the upper-most 4 bits of the 11-BIT message identifier
-;------------------------------------------------------------------------------
-;NMT                constant        0x000       ; Network Management
-SYNC_ERR_BASE       constant        0x080       ; Both Sync (COB-ID=0) & Error (COB-ID=Error)
-TIME_STAMP          constant        0x100
-PDO1_TX_BASE        constant        0x180       ; Process Data Object (Master In  Slave Out)
-PDO1_RX_BASE        constant        0x200       ; Process Data Object (Master Out Slave In)
-PDO2_TX_BASE        constant        0x280       ; Process Data Object (System Broadcast 1)
-PDO2_RX_BASE        constant        0x300       ; Process Data Object (System Broadcast 2)
-PDO3_TX_BASE        constant        0x380       ; Process Data Object (System Broadcast 3)
-PDO3_RX_BASE        constant        0x400       ; Process Data Object (System Broadcast 4)
-PDO4_TX_BASE        constant        0x480       ; Index Data Object   (Master In  Slave Out)
-PDO4_RX_BASE        constant        0x500       ; Index Data Object   (Master Out Slave In)
-SDO_MISO_BASE       constant        0x580       ; Service Data Object (Master In  Slave Out)
-SDO_MOSI_BASE       constant        0x600       ; Service Data Object (Master Out Slave In)
-HEARTBEAT_BASE      constant        0x700       ; Node Guard Message
-
-DLC_NMT             constant        0x2         ; Data Length Code of a CANopen NMT Message
-DLC_EMCY            constant        0x8         ; Data Length Code of a CANopen EMCY Message
-DLC_PDO             constant        0x8         ; Data Length Code of a CANopen PDO Message
-DLC_SDO             constant        0x8         ; Data Length Code of a CANopen SDO Message
-DLC_HEARTBEAT       constant        0x1         ; Data Length Code of a CANopen Heartbeat Message
-    
-;-------------------------------------------------------------------------------
-; synchronous cycle period defintion
-;-------------------------------------------------------------------------------
-SYNC_SEND_PERIOD        constant    5   ; 10 * 4ms = 40ms	
-	
 ;-------------------------------------------------------------------------
 ; Startup CAN system
 ;---------------------------------------------
@@ -266,7 +270,10 @@ startup_CAN_System:
 ;-------------------------------------------------------------------------------
 
 Setup_Mailbox(CAN1,0,0,0x000,C_EVENT,C_XMT,0,0)
-Setup_Mailbox_Data(CAN1,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,0,0,0)
+Setup_Mailbox_Data(CAN1,DLC_NMT,
+									@NMT_Command_Specifier, 
+									@NMT_Node_Address,
+									0,0,0,0,0,0)
 
 ;-------------------------------------------------------------------------------
 ; MAILBOX 14
@@ -278,13 +285,20 @@ Setup_Mailbox_Data(CAN1,DLC_NMT,@NMT_Command_Specifier, @NMT_Node_Address,0,0,0,
 ;-------------------------------------------------------------------------------
 
 Setup_Mailbox(CAN14,0,0,PDO1_RX_BASE + Par_E7_Node_ID,C_CYCLIC,C_XMT,0,0)
-Setup_Mailbox_Data(CAN14,DLC_PDO,@Current_RMS, @Current_RMS+USEHB,@Motor_RPM_Display,@Motor_RPM_Display+USEHB,@Motor_Temperature,@Motor_Temperature+USEHB,0,0)
+Setup_Mailbox_Data(CAN14,DLC_PDO,
+									@Current_RMS, 
+									@Current_RMS+USEHB,
+									@Motor_RPM_Display,
+									@Motor_RPM_Display+USEHB,
+									@Motor_Temperature,
+									@Motor_Temperature+USEHB,
+									0,0)
 
 
 Startup_CAN()
-Sned_Mailbox(CAN1)
+Send_Mailbox(CAN1)
 
-CAN_Set_Cyclic_Rate(SYNC_SEND_PERIOD)   ;send info at 40ms
+CAN_Set_Cyclic_Rate(SYNC_SEND_PERIOD)   ;send info at 20ms
 
 Startup_CAN_Cyclic()
 
