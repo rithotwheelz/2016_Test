@@ -163,13 +163,34 @@ MainLoop:
 		{
 			Throttle_Multiplier = 0
 		}
+;****************************************************************************
+;****************************************************************************
+;									Speed, Accel and Decel Rates
+;****************************************************************************
+;****************************************************************************
 		
 	if (Reverse_Switch = ON)			;slow down how fast the car can run in reverse
 		{
-			Max_Speed_SpdMx = 500
+			Max_Speed_TrqM = 500
 			Accel_Rate_SpdMx = 15000
 		}	
-	
+	else if ((Reverse_Switch = OFF)&(Forward_Switch = OFF))     ;if the car is in neutral, reduce speed and cut throttle
+		{ 
+			;Decel_Rate_SpdMx = 9000		;This is for Speed Mode Express-unused
+			Max_Speed_TrqM = 400
+			Throttle_Multiplier= 0
+		}
+	else													;if forward switch is on, set Max Speed to 3000 and Accel to 1.0 sec
+		{
+			Max_Speed_TrqM = 3000		
+			Accel_Rate_TrqM = 1000
+		}
+					
+;****************************************************************************
+;****************************************************************************
+;										  Race Mode Buttons	
+;****************************************************************************
+;****************************************************************************
 	if (Drag_Mode_Switch_UP = ON)		;Someone pressed Drag Mode Button
 		{
 			Endurance_Mode_Switch_UP = OFF
@@ -194,17 +215,8 @@ MainLoop:
 			AutoCross_Mode_Switch_UP = OFF
 		}
 		
-	else if ((Reverse_Switch = OFF)&(Forward_Switch = OFF))     ;if the car is in neutral, reduce speed and cut throttle
 	
-		{ 
-			Decel_Rate_SpdMx = 9000
-			Max_Speed_SpdMx = 400
-			Throttle_Multiplier= 0
-		}
-;	else
-;		{
-;			;Do Nothing
-;		}
+
 			
 	goto MainLoop
 	
