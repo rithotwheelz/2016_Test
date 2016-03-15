@@ -1,0 +1,152 @@
+;===============================================================
+; RIT Hot Wheelz - OS25
+;===========================================
+;
+;   Copyright © 2016, all rights reserved
+;
+;		RIT Hot Wheelz Formula SAE Electric Team
+;		Rochester Institue of Technology
+;   77 Lomb Memorial Dr
+;		Rochester, NY 14623                             	          
+;
+;										
+VCL_App_Ver = 102	;Set VCL software revision (101 is Rev 1.01)
+;
+;---------------------------------------------------------------
+; Declaration Section
+;--------------------
+
+	Interlock_Switch		equals 	SW_3
+	
+	Forward_Switch			equals  SW_7
+	Reverse_Switch			equals  SW_8
+	
+	Drag_Mode_Switch		equals	SW_4
+	Drag_Mode_Switch_UP		equals	SW_4_UP			;Used if up edge is used for input signal
+	Drag_Mode_Switch_DOWN		equals	SW_4_DOWN		;Used if down edge is used for input signal
+	
+	Endurance_Mode_Switch		equals	SW_6
+	Endurance_Mode_Switch_UP	equals	Sw_6_UP			;Used if up edge is used for input signal
+	Endurance_Mode_Switch_DOWN	equals	Sw_6_DOWN		;Used if down edge is used for input signal
+	
+	AutoCross_Mode_Switch		equals	SW_5
+	AutoCross_Mode_Switch_UP	equals	Sw_5_UP			;Used if up edge is used for input signal
+	AutoCross_Mode_Switch_DOWN	equals	Sw_5_DOWN		;Used if down edge is used for input signal
+	
+	Buzzer_Noise			equals PWM5			;Using proportional driver to power noise maker
+
+	Drag_Lights			equals	DigOut6			;Driver 6 OFF/ON
+	Endurance_Lights		equals	PWM6			;Analog Out 0-10V
+	AutoCross_Lights		equals	DigOut7			;Driver 7 OFF/ON
+	
+	Drag_MaxCurrent_DLY		equals	DLY1
+	Drag_MaxCurrent_DLY_Output	equals	DLY1_Output
+	
+	Buzzer_DLY			equals  DLY2		
+	Buzzer_DLY_Output		equals	DLY2_Output
+	
+	Program_Flags			equals	User_Bit1
+	Drag_Mode_Initialized_Flag 		 bit	Program_Flags.1
+;	Not Used				 bit	Program_Flags.2
+;	Not Used				 bit	Program_Flags.4
+;	Not Used				 bit	Program_Flags.8
+;	Not Used				 bit	Program_Flags.16
+;	Not Used				 bit	Program_Flags.32
+;	Not Used				 bit	Program_Flags.64
+;	Not Used				 bit	Program_Flags.128
+		
+	
+	
+;===============================================================
+; One time Initialization
+;===============================================================
+;
+		Program_Flags = 0
+		Setup_Delay(Buzzer_DLY,3000)		;Amount of time for ready to drive noise
+
+;-------------------------------------------------------------------------
+; Main :: Main Loop of the Program
+;---------------------------------------------
+;
+MainLoop:
+
+	If(Buzzer_DLY_Output<>0)             ;while the buzzer delay output does not equal 0, sound the buzzer, and turn on autox race mode
+		{
+            		Put_PWM(Buzzer_Noise, 32767)         ;turn on the buzzer
+            		Call AutoCrossMode		     ;turn on autox
+        	}Else{
+			Put_PWM(Buzzer_Noise,0)              ;turn off the buzzer
+		}
+	
+	if (Interlock_Switch = ON)		;The Interlock Switch is the switch on the throttle pedal. If the switch is off, do not allow throttle command
+		{
+			Throttle_Multiplier = 128
+		}
+	else
+		{
+			Throttle_Multiplier = 0
+		}
+	
+	
+	if (Drag_Mode_Switch_UP = ON)			;Someone pressed Drag Mode Button
+		{
+			Endurance_Mode_Switch_UP = OFF
+			AutoCross_Mode_Switch_UP = OFF
+			Call DragMode
+			Drag_Mode_Switch_UP = OFF
+			Setup_Delay(Drag_MaxCurrent_DLY,7000)		;Drag should exit after 7~8 seconds without input from driver
+		}
+	if (Endurance_Mode_Switch_UP = ON)		;Someone pressed Endurance Mode Button
+		{
+			AutoCross_Mode_Switch_UP = OFF
+			Drag_Mode_Switch_UP = OFF
+			Call EnduranceMode
+			Endurance_Mode_Switch_UP = OFF
+		}
+	if (AutoCross_Mode_Switch_UP = ON)
+		{
+			Endurance_Mode_Switch_UP = OFF
+			Drag_Mode_Switch_UP = OFF
+			Call AutoCrossMode
+			AutoCross_Mode_Switch_UP = OFF
+		}
+		
+;	else
+;		{
+;			;Do Nothing
+;		}
+			
+	goto MainLoop
+	
+	
+;-------------------------------------------------------------------------
+; Subroutines
+;---------------------------------------------
+;
+
+DragMode:			
+
+	;Drive_Current_Limit = 26213 		MAX Amps = 400A which is 80% of 32767
+	Put_PWM(Endurance_Lights,0)     	;endurance light = ON	
+	Clear_Digout(AutoCross_Lights)		;Turn off autocross light
+	Set_Digout(Drag_Lights)			;Turn on drag light		
+	
+	return
+		
+EnduranceMode:
+	
+	;Drive_Current_Limit = 6553		MAX AMPS = 100A which is 20% of 32767
+	Clear_Digout(Drag_Lights)		;turn off drag light
+	Clear_Digout(AutoCross_Lights)		;Turn off autocross light
+	Put_PWM(Endurance_Lights,32767) 	;Turn on endurance light
+
+	return
+
+AutoCrossMode:
+			
+	;Drive_Current_Limit = 16383 		MAX AMPS = 250A which is 50% of 32767
+	Clear_Digout(Drag_Lights) 		;Turn off drag light	
+	Put_PWM(Endurance_Lights,0)		;Turn off  endurance light
+	Set_DigOut(AutoCross_Lights)		;Turn on autocross light
+
+	return
