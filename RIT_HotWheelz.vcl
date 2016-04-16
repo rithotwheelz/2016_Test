@@ -2,7 +2,7 @@
 ; RIT Hot Wheelz - OS25
 ;===========================================
 ;
-;   Copyright © 2016, all rights reserved
+;   Copyright Â© 2016, all rights reserved
 ;
 ;		RIT Hot Wheelz Formula SAE Electric Team
 ;		Rochester Institue of Technology
