@@ -6,7 +6,7 @@
 ;
 ;		RIT Hot Wheelz Formula SAE Electric Team
 ;		Rochester Institue of Technology
-;   77 Lomb Memorial Dr
+;   		77 Lomb Memorial Dr
 ;		Rochester, NY 14623                             	          
 ;
 ;										
@@ -20,7 +20,7 @@ VCL_App_Ver = 103	;Set VCL software revision (101 is Rev 1.01)
 	
 	Forward_Switch			equals  SW_7
 	Forward_Switch_Up		equals	SW_7_UP
-	Forward_Switch_Down	equals	SW_7_DOWN
+	Forward_Switch_Down		equals	SW_7_DOWN
 	Reverse_Switch			equals  SW_8
 	
 	Drag_Mode_Switch		equals	SW_4
@@ -42,110 +42,107 @@ VCL_App_Ver = 103	;Set VCL software revision (101 is Rev 1.01)
 	Endurance_Lights		equals	PWM4			;Driver 4 PWM
 	AutoCross_Lights		equals	DigOut7			;Driver 7 OFF/ON
 	
-	MainContactor			equals	PWM1_Output
-	MainContactor_Indicator		equals  PWM6			;Analog Out 0-10V
+	Drag_MaxCurrent_DLY		equals	DLY1
+	Drag_MaxCurrent_DLY_Output	equals	DLY1_Output
 	
-	Drag_MaxCurrent_DLY							equals	DLY1
-	Drag_MaxCurrent_DLY_Output			equals	DLY1_Output
+	Buzzer_DLY			equals  DLY2		
+	Buzzer_DLY_Output		equals	DLY2_Output
 	
-	Buzzer_DLY											equals  DLY2		
-	Buzzer_DLY_Output								equals	DLY2_Output
+	Startup_Delay			equals DLY3
+	Startup_Delay_Output		equals DLY3_Output
 	
-	Startup_Delay										equals DLY3
-	Startup_Delay_Output						equals DLY3_Output
+	EnGage_State_Delay		equals DLY4
+	EnGage_State_Delay_Output	equals DLY4_Output
 	
-	EnGage_State_Delay							equals DLY4
-	EnGage_State_Delay_Output			  equals DLY4_Output
+	Engage_Display_Delay		equals DLY5
+	Engage_Display_Delay_Output	equals DLY5_Output
 	
-	Engage_Display_Delay						equals DLY5
-	Engage_Display_Delay_Output			equals DLY5_Output
-	
-	Engage_Fault_Display_Delay				equals DLY6
+	Engage_Fault_Display_Delay	equals DLY6
 	Engage_Fault_Display_Delay_Output	equals DLY6_Output
 	
-	Debounce_DLY										equals DLY7
-	Debounce_DLY_Output							equals DLY7_Output
+	Debounce_DLY			equals DLY7
+	Debounce_DLY_Output		equals DLY7_Output
 	
-	BMS_State_Delay									equals DLY8
-	BMS_State_Delay_Output					equals DLY8_Output
+	BMS_State_Delay			equals DLY8
+	BMS_State_Delay_Output		equals DLY8_Output
 	
 	Program_Flags			equals	User_Bit1
-	Drag_Mode_Initialized_Flag 		 					 bit	Program_Flags.1
+	Drag_Mode_Initialized_Flag 		 bit	Program_Flags.1
 	Startup_CAN_System_Has_Been_Called_Flag	 bit	Program_Flags.2
-	Button_Press_Flag				 								 bit	Program_Flags.4
+	Button_Press_Flag			 bit	Program_Flags.4
 ;	Not Used				 bit	Program_Flags.8
 ;	Not Used				 bit	Program_Flags.16
 ;	Not Used				 bit	Program_Flags.32
 ;	Not Used				 bit	Program_Flags.64
 ;	Not Used				 bit	Program_Flags.128
 
-Switch_Screen_Flags										equals	User_Bit2
-Goto_MSG_Screen_Flag											 bit	 Switch_Screen_Flags.1 ;Indicates if a button press occured to change E6 Screen to show fault list
-Goto_Gauge_Screen_Flag										 bit	 Switch_Screen_Flags.2 ;Indicates if a button press occured to change E6 Screen to show gauge
+Switch_Screen_Flags			equals	User_Bit2
+Goto_MSG_Screen_Flag				 bit	 Switch_Screen_Flags.1 ;Indicates if a button press occured to change E6 Screen to show fault list
+Goto_Gauge_Screen_Flag				 bit	 Switch_Screen_Flags.2 ;Indicates if a button press occured to change E6 Screen to show gauge
 
 
 
 Engage_State	    			equals	User1	;state machine for sending messages to engage display 
-NMT_Command_Specifier		equals  User2
-NMT_Node_Address				equals  User3
+NMT_Command_Specifier			equals  User2
+NMT_Node_Address			equals  User3
 
-E7_Battery_Current 		  equals User4		 			
-E7_Keyswitch_Voltage		equals User5	 
+E7_Battery_Current 		  	equals User4		 			
+E7_Keyswitch_Voltage			equals User5	 
 E7_Regen_Percentage			equals	User6		  
-E7_Vehicle_Speed				equals	User7	 
-E7_Icon_Status					equals	User8
-	Battery_Icon										bit	E7_Icon_Status.1
-	Warning_Icon										bit	E7_Icon_Status.2
-	Temperature_Icon								bit	E7_Icon_Status.4
-	Rabbit_Icon											bit	E7_Icon_Status.8
-	Turtle_Icon											bit	E7_Icon_Status.16
-	;unused													bit	E7_Icon_Status.32
-	Left_Turn_Signal_Icon						bit	E7_Icon_Status.64
-	Right_Turn_Signal_Icon					bit	E7_Icon_Status.128
+E7_Vehicle_Speed			equals	User7	 
+E7_Icon_Status				equals	User8
+	Battery_Icon				bit	E7_Icon_Status.1
+	Warning_Icon				bit	E7_Icon_Status.2
+	Temperature_Icon			bit	E7_Icon_Status.4
+	Rabbit_Icon				bit	E7_Icon_Status.8
+	Turtle_Icon				bit	E7_Icon_Status.16
+	;unused					bit	E7_Icon_Status.32
+	Left_Turn_Signal_Icon			bit	E7_Icon_Status.64
+	Right_Turn_Signal_Icon			bit	E7_Icon_Status.128
 	             
 E7_Drive_Gear_Select		equals	User9
 	NO_GEAR_ICON						constant	0x00
 	PARKING_ICON						constant	0x01
 	REVERSE_ICON						constant	0x02
 	NEUTRAL_ICON						constant	0x03
-	DRIVE_ICON							constant	0x04
-	SPORT_ICON							constant	0x05		
-E7_Pushbutton_Status						equals	User10
-	;unused													bit	E7_Pushbutton_Status.1
-	;unused													bit	E7_Pushbutton_Status.2
-	Left_Button											bit	E7_Pushbutton_Status.4
-	Up_Button												bit	E7_Pushbutton_Status.8
-	Enter_Button										bit	E7_Pushbutton_Status.16
-	Down_Button											bit	E7_Pushbutton_Status.32
-	Right_Button										bit	E7_Pushbutton_Status.64	  
+	DRIVE_ICON						constant	0x04
+	SPORT_ICON						constant	0x05		
+E7_Pushbutton_Status		equals	User10
+	;unused					bit	E7_Pushbutton_Status.1
+	;unused					bit	E7_Pushbutton_Status.2
+	Left_Button				bit	E7_Pushbutton_Status.4
+	Up_Button				bit	E7_Pushbutton_Status.8
+	Enter_Button				bit	E7_Pushbutton_Status.16
+	Down_Button				bit	E7_Pushbutton_Status.32
+	Right_Button				bit	E7_Pushbutton_Status.64	  
 	
-e7_Text_Code  					 equals User11	
+e7_Text_Code  			 equals User11	
 
-Display_State						 equals	User12
-Fault_Code 							 equals	User13
-Display_Set_To_Message 	 equals User14
+Display_State			 equals	User12
+Fault_Code 			 equals	User13
+Display_Set_To_Message 		 equals User14
 
-Index  									equals	User15
-Fault_Code_Engage				equals	User16
+Index  				equals	User15
+Fault_Code_Engage		equals	User16
 Traction_Fault_Count		equals	User17
 
-BMS_State								equals	User18
-E7_BMS_SOC							equals	User19
+BMS_State			equals	User18
+E7_BMS_SOC			equals	User19
 
 ;---------------------VCL Fault Definitions--------------------------
 
 ;-------------------Fault Action Definitions------------------------
 Shutdown_Motor				constant	0x0001
-Shutdown_Main					constant	0x0002
+Shutdown_Main				constant	0x0002
 Shutdown_EMBrake			constant	0x0004
 Shutdown_Throttle			constant	0x0008
-Shutdown_Interlock		constant	0x0010
+Shutdown_Interlock			constant	0x0010
 Shutdown_Driver1			constant	0x0020
 Shutdown_Driver2			constant	0x0040
 Shutdown_Driver3			constant	0x0080
 Shutdown_Driver4			constant	0x0100
-Shutdown_PD						constant	0x0200
-Full_Brake						constant	0x0400
+Shutdown_PD				constant	0x0200
+Full_Brake				constant	0x0400
 
 ;------------ USER FAULT DEFINITION --------
 
@@ -156,11 +153,10 @@ BMS_Module_Fault					bit	Userfault1.1	 ;Fault #1 51  Indicates a fault on BMS Mo
 ;													bit UserFault1.16	 ;Fault #5 55
 ;													bit UserFault1.32	 ;Fault #6 56
 ;													bit UserFault1.64	 ;Fault #7 57
-;													bit UserFault1.128 ;Fault #8 58
-
+;													bit UserFault1.128 	 ;Fault #8 58
 ;													bit UserFault2.1	 ;Fault #9 59
 ;													bit UserFault2.2	 ;Fault #10 61
-;               					bit UserFault2.4	 ;Fault #11 62
+;               											bit UserFault2.4	 ;Fault #11 62
 ;													bit UserFault2.8	 ;Fault #12 63
 ;													bit UserFault2.16	 ;Fault #13 64
 ;													bit UserFault2.32	 ;Fault #14 65
@@ -201,7 +197,7 @@ NMT_CS_STOP_REMOTE_NODE         constant 0x02
 NMT_CS_ENTER_PREOPERATIONAL     constant 0x80
 NMT_CS_RESET_NODE               constant 0x81
 NMT_CS_RESET_COMMUNICATION      constant 0x82
-ENGAGE_7_NODE										constant 0x6E
+ENGAGE_7_NODE			constant 0x6E
 
 
 
@@ -217,11 +213,11 @@ SDO_READ_COMMAND								constant 0x42
 e7_SDO_MOSI_Mailbox							equals CAN1
 e7_SDO_MISO_Mailbox							equals CAN2
 
-STARTUP_Mailbox									equals CAN17
+STARTUP_Mailbox								equals CAN17
 e7_PDO_MOSI_Mailbox							equals CAN18
 e7_PDO_MISO_Mailbox							equals CAN19
-BMS_SDO_MOSI_Mailbox						equals CAN15
-BMS_SDO_MISO_Mailbox			     	equals CAN16
+BMS_SDO_MOSI_Mailbox							equals CAN15
+BMS_SDO_MISO_Mailbox			     				equals CAN16
 
 		
 	
@@ -260,11 +256,11 @@ Call Process_BMS
 	if (Buzzer_DLY_Output<>0)             ;while the buzzer delay output does not equal 0, sound the buzzer, and turn on autox race mode
 		{
     	Put_PWM(Buzzer_Noise, 32767)         ;turn on the buzzer
-      Call AutoCrossMode		     ;turn on autox
+        Call AutoCrossMode		     ;turn on autox
     }
-   else
-    {
-			Put_PWM(Buzzer_Noise,0)              ;turn off the buzzer
+	else
+		{
+    	Put_PWM(Buzzer_Noise,0)              ;turn off the buzzer
 		}
 	
 	if (Interlock_Switch = ON)		;The Interlock Switch is the switch on the throttle pedal. If the switch is off, do not allow throttle command
@@ -276,17 +272,6 @@ Call Process_BMS
 			Throttle_Multiplier = 0
 		}
 	
-;;		if (MainContactor = 0)
-;		if((Fault_Code=0)|(Fault_Code = 27)|(Fault_Code = 28)|(Fault_Code=24)|(Fault_Code = 15)|(Fault_Code = 16)|(Fault_Code = 10)|
-;			(Fault_Code = 18)|(Fault_Code = 31)|(Fault_Code = 1)|(Fault_Code = 7)|(Fault_Code = 30)|(Fault_Code = 50)|(Fault_Code = 36)|
-;			(Fault_Code = 45)|(Fault_Code = 34)|(Fault_Code = 46)|(Fault_Code = 63)|(Fault_Code = 44)|(Fault_Code = 49)|(Fault_Code = 55))
-;		{
-;			;Put_PWM(MainContactor_Indicator,0)		;output 0V at analog out
-;		}
-;		else
-;		{
-;			Put_PWM(MainContactor_Indicator,32767)		;output 10V at analog out
-;		}
 	
 	if (Drag_Mode_Switch_UP = ON)			;Someone pressed Drag Mode Button
 		{
@@ -343,11 +328,6 @@ Call Process_BMS
 			}
 			
 			
-					
-					
-			 	
-					
-		
 		
 ;	else
 ;		{
@@ -368,7 +348,7 @@ Call Process_BMS
 
 DragMode:			
 
-	;Drive_Current_Limit = 26213 		MAX Amps = 400A which is 80% of 32767
+	Drive_Current_Limit = 26213 		;MAX Amps = 400A which is 80% of 32767
 	Put_PWM(Endurance_Lights,0)     	;endurance light = ON	
 	Clear_Digout(AutoCross_Lights)		;Turn off autocross light
 	Set_Digout(Drag_Lights)			;Turn on drag light
@@ -380,7 +360,7 @@ DragMode:
 		
 EnduranceMode:
 	
-	;Drive_Current_Limit = 6553		MAX AMPS = 100A which is 20% of 32767
+	Drive_Current_Limit = 6553		;MAX AMPS = 100A which is 20% of 32767
 	Clear_Digout(Drag_Lights)		;turn off drag light
 	Clear_Digout(AutoCross_Lights)		;Turn off autocross light
 	Put_PWM(Endurance_Lights,32767) 	;Turn on endurance light
@@ -391,7 +371,7 @@ EnduranceMode:
 
 AutoCrossMode:
 			
-	;Drive_Current_Limit = 16383 		MAX AMPS = 250A which is 50% of 32767
+	Drive_Current_Limit = 16383 		;MAX AMPS = 250A which is 50% of 32767
 	Clear_Digout(Drag_Lights) 		;Turn off drag light	
 	Put_PWM(Endurance_Lights,0)		;Turn off  endurance light
 	Set_DigOut(AutoCross_Lights)		;Turn on autocross light
